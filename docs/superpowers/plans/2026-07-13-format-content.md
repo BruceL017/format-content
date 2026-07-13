@@ -19,6 +19,10 @@
 - Use `253661133+BruceL017@users.noreply.github.com` for every commit author and committer email.
 - Publish the final repository publicly as `BruceL017/format-content`.
 
+## Installer Compatibility Amendment
+
+`npx skills` 1.5.16 installs only `SKILL.md` when a cloned repository itself is detected as the Skill root. A controlled `/tmp` experiment proved that a nested `format-content/SKILL.md` causes the installer to copy the complete Skill directory. Final layout therefore MUST keep public repository files at the root and the installable Skill under `format-content/`; all earlier Skill-file paths become `format-content/<path>` after the migration. The repository URL and installed Skill name remain unchanged.
+
 ---
 
 ### Task 1: Scaffold the portable Skill and import upstream assets
@@ -189,6 +193,14 @@ If Task 4 changed tracked files, verify the noreply email and commit them with `
 - [ ] **Step 1: Run the complete pre-publish gate**
 
 Re-run structural validation, unit tests, Python compilation, component lint, clean-output validation, prompt review, `git status -sb`, and the commit-email audit for every local commit.
+
+- [ ] **Step 1a: Reproduce and guard the installer layout bug**
+
+Add a failing repository-layout test that requires no root `SKILL.md`, requires `format-content/SKILL.md`, and requires the nested references, scripts, assets, metadata, license, and notice. Run it before migration and record the expected failure.
+
+- [ ] **Step 1b: Apply the single layout fix and turn the test green**
+
+Move the installable Skill files under `format-content/`, keep repository documentation/tests/licenses at the root, bundle `LICENSE` and `NOTICE` in the nested Skill, and update repository tests to resolve the nested Skill root. Run the layout test, full unit suite, structural validation, compilation, component lint, and fresh-Agent behavior until all pass.
 
 - [ ] **Step 2: Create and push the public repository**
 

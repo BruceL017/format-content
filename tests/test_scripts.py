@@ -6,14 +6,15 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS = ROOT / "scripts"
+SKILL_ROOT = ROOT / "format-content"
+SCRIPTS = SKILL_ROOT / "scripts"
 FIXTURES = ROOT / "tests" / "fixtures"
 
 
 def run_script(name, *args):
     return subprocess.run(
         [sys.executable, str(SCRIPTS / name), *(str(arg) for arg in args)],
-        cwd=ROOT,
+        cwd=SKILL_ROOT,
         capture_output=True,
         text=True,
         encoding="utf-8",
@@ -57,7 +58,7 @@ class ScriptIntegrationTests(unittest.TestCase):
         self.assertEqual(preview.count(clean), 1)
 
     def test_component_lint_reports_zero_errors(self):
-        result = run_script("component_lint.py", ROOT)
+        result = run_script("component_lint.py", SKILL_ROOT)
 
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("ERROR×0", result.stdout)

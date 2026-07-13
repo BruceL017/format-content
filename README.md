@@ -10,6 +10,8 @@
 npx skills add https://github.com/BruceL017/format-content
 ```
 
+仓库根目录保留项目文档与测试，可安装 Skill 位于 `format-content/`。这一层目录确保 `npx skills` 会把引用、脚本、预览模板和元数据一起安装；安装命令与 Skill 名称不变。
+
 ## 支持范围
 
 支持：
@@ -54,7 +56,7 @@ python3 /absolute/path/to/format-content/scripts/validate_gzh_html.py /workspace
 组件库本身可用以下命令检查：
 
 ```bash
-python3 scripts/component_lint.py .
+python3 format-content/scripts/component_lint.py format-content
 ```
 
 ## 来源与许可

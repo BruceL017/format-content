@@ -12,12 +12,13 @@ The red-and-white theme behavior remains aligned with the upstream Skill: articl
 
 ## Architecture
 
-- `SKILL.md` owns the fixed-theme workflow, input contract, failure paths, output contract, and verification loop.
-- `references/theme-red-white.md` remains the authoritative red-and-white component library.
-- `references/common-components.md` supplies code, media, and small-label components shared by the upstream design.
-- `scripts/component_lint.py` checks component-library source HTML.
-- `scripts/validate_gzh_html.py` checks the generated clean HTML fragment.
-- `scripts/wrap_preview.py` and `assets/preview-template.html` create the browser preview with a rich-text copy button.
+- The repository root owns public documentation, licensing, tests, and development records.
+- `format-content/SKILL.md` owns the fixed-theme workflow, input contract, failure paths, output contract, and verification loop.
+- `format-content/references/theme-red-white.md` remains the authoritative red-and-white component library.
+- `format-content/references/common-components.md` supplies code, media, and small-label components shared by the upstream design.
+- `format-content/scripts/component_lint.py` checks component-library source HTML.
+- `format-content/scripts/validate_gzh_html.py` checks the generated clean HTML fragment.
+- `format-content/scripts/wrap_preview.py` and `format-content/assets/preview-template.html` create the browser preview with a rich-text copy button.
 
 The Skill is runtime-neutral. Its instructions must not depend on Codex-, Claude Code-, or Cursor-specific tool names. Optional Codex UI metadata may exist under `agents/` without changing the portable workflow.
 
@@ -44,9 +45,9 @@ Completion requires:
 
 ## Distribution and License
 
-The repository root is the Skill root and will be published as the public GitHub repository `BruceL017/format-content`. Installation uses the repository URL through the same `npx skills add` mechanism documented upstream.
+The installable Skill is the nested directory `format-content/` inside the public repository `BruceL017/format-content`. The repository root MUST NOT contain `SKILL.md`: `npx skills` 1.5.16 special-cases a root Skill and copies only `SKILL.md`, dropping bundled references, scripts, and assets. With the nested directory, the installer copies the complete Skill while the installation command remains the repository URL used by the upstream project.
 
-This project is a modified extraction of `isjiamu/gzh-design-skill`. It retains AGPL-3.0 licensing, upstream copyright notices, attribution, and a notice describing the reduced fixed-theme scope.
+This project is a modified extraction of `isjiamu/gzh-design-skill`. It retains AGPL-3.0 licensing, upstream copyright notices, attribution, and a notice describing the reduced fixed-theme scope. License and notice files remain at the repository root and are also bundled in the installed Skill directory.
 
 ## Non-goals
 
