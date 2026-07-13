@@ -1,0 +1,31 @@
+format-content
+
+This distribution contains material derived from:
+
+  Project: gzh-design-skill
+  Repository: https://github.com/isjiamu/gzh-design-skill
+  Source commit: ba1f4175519b481cb3566616c9e5178705067904
+  Original copyright: Copyright (C) 2026 甲木 (Jiamu) × 摸鱼小李 (Moyu Xiaoli)
+  License: GNU Affero General Public License, version 3 or later
+
+The following files are retained unchanged from that source commit:
+
+  references/theme-red-white.md
+  references/common-components.md
+  scripts/component_lint.py
+  scripts/validate_gzh_html.py
+  scripts/wrap_preview.py
+  assets/preview-template.html
+  LICENSE
+
+Modification notice (2026-07-13):
+
+The upstream project was reduced to a standalone Agent Skill named
+"format-content". The modified workflow accepts only Markdown text or a
+readable .md file, always uses the red-and-white theme, emits a validated
+clean section fragment plus a copy-button preview, and never publishes to
+WeChat. Non-Markdown normalization, theme selection, theme generation, and
+all other themes were removed from this distribution.
+
+The modified distribution remains licensed under the GNU Affero General
+Public License, version 3 or later. See LICENSE for the complete terms.
