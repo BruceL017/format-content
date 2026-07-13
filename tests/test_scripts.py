@@ -61,6 +61,23 @@ class ScriptIntegrationTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, diagnostics)
         self.assertNotIn("WARNING", diagnostics)
 
+    def test_validator_accepts_self_closing_html_void_elements(self):
+        result = run_validator_html(
+            '<section><span leaf="">正文。</span><img/><br/><hr/></section>'
+        )
+        diagnostics = result.stdout + result.stderr
+
+        self.assertEqual(result.returncode, 0, diagnostics)
+        self.assertNotIn("WARNING", diagnostics)
+
+    def test_validator_rejects_self_closing_root_section(self):
+        self.assert_structure_rejected('<section/>')
+
+    def test_validator_rejects_self_closing_non_void_element(self):
+        self.assert_structure_rejected(
+            '<section><p/><span leaf="">正文。</span></section>'
+        )
+
     def test_validator_rejects_fragment_without_root_section(self):
         self.assert_structure_rejected(
             '<p><span leaf="">正文。</span></p>'

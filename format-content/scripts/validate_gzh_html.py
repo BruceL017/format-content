@@ -73,6 +73,8 @@ class StructureChecker(HTMLParser):
             self.top_level.append(tag)
         if tag in DOCUMENT_TAGS:
             self.errors.append(f"正文片段不能包含 <{tag}> 文档包装标签")
+        if tag not in VOID_TAGS:
+            self.errors.append(f"非 void 标签 <{tag}/> 不能使用自闭合写法")
 
     def handle_endtag(self, tag):
         if tag in VOID_TAGS:
