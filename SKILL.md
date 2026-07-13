@@ -1,6 +1,6 @@
 ---
 name: format-content
-description: "Format Markdown text or a readable .md file as WeChat Official Account HTML with the fixed red-and-white theme, producing a validated clean section fragment and a browser preview with a copy button. Use when the user asks for 公众号排版, 微信排版, WeChat Official Account formatting, or Markdown-to-WeChat HTML and supplies Markdown. Do not use for Word, PDF, TXT, rich text, unstructured prose, other themes, ordinary web pages, substantive rewriting, or WeChat publishing/API operations."
+description: "Format Markdown text or a readable .md file as WeChat Official Account HTML with the fixed red-and-white theme, producing a validated clean section fragment and a browser preview with a copy button. Use when the user asks for 公众号排版, 微信排版, WeChat Official Account formatting, or Markdown-to-WeChat HTML and supplies Markdown. Do NOT trigger when the request concerns Word, PDF, TXT, rich text, unstructured prose, other themes, ordinary web pages, substantive rewriting, or WeChat publishing/API operations."
 ---
 
 # Format Content
@@ -16,6 +16,8 @@ Convert one Markdown article into WeChat-compatible inline-styled HTML with the 
 - Do not rewrite or omit substantive content. Do not create a normal website, publish an article, create a WeChat draft, or call any WeChat API.
 
 ## Guarded procedure
+
+CREATE A TODO LIST FOR THE TASKS BELOW, with one TODO for each numbered stage, then execute stages 1–8 in order.
 
 ### 1. Establish paths and validate the input
 
@@ -136,7 +138,7 @@ Completion means all of the following are observable:
 - `PREVIEW_PATH` exists with the exact name, contains the clean fragment once unchanged after outer-whitespace normalization, and includes the “复制到公众号” button.
 - No WeChat API, draft creation, or publishing action occurred.
 
-Report both absolute output paths, the zero-error/zero-warning result, and this instruction: open the preview, click “复制到公众号”, then paste into the WeChat editor. Also report the clean file as the manual-copy fallback and call out unresolved author or media placeholders.
+Report both absolute output paths, the zero-error/zero-warning result, and this instruction: open the preview, click “复制到公众号”, then paste into the WeChat editor. Also report the clean file as the manual-copy fallback, call out unresolved author or media placeholders, and end the procedure.
 
 ## Failure exits
 
@@ -159,5 +161,5 @@ Result: read the Markdown from `/work/article.md`, use only the red-white librar
 <bad-example>
 User: “把 `report.docx` 自动选个主题排版，再直接发布到公众号。”
 
-Wrong: convert the Word file, choose or generate a theme, and call a publishing API. Correct: create nothing and ask for Markdown, while explaining that this Skill uses only the fixed red-white theme and never publishes.
+WRONG: convert the Word file, choose or generate a theme, and call a publishing API. Correct: create nothing and ask for Markdown, while explaining that this Skill uses only the fixed red-white theme and never publishes.
 </bad-example>
