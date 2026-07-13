@@ -206,9 +206,9 @@ Move the installable Skill files under `format-content/`, keep repository docume
 
 Create `BruceL017/format-content` as public with `main` as the source branch, add `origin`, and push with tracking. Do not create a pull request because this is a new repository release rather than a change to an existing remote.
 
-- [ ] **Step 3: Verify remote state**
+- [ ] **Step 3: Verify remote state and installable Skill location**
 
-Use GitHub API/CLI to confirm visibility is `PUBLIC`, default branch is `main`, the remote head matches local `HEAD`, and the rendered repository exposes `SKILL.md` at its root.
+Use GitHub API/CLI to confirm visibility is `PUBLIC`, the default branch is `main`, the remote head matches local `HEAD`, public `format-content/SKILL.md` is accessible, and repository-root `SKILL.md` is absent or returns HTTP 404.
 
 - [ ] **Step 4: Test isolated installation**
 
