@@ -13,8 +13,6 @@ The following files are retained unchanged from that source commit:
   format-content/references/theme-red-white.md
   format-content/references/common-components.md
   format-content/scripts/component_lint.py
-  format-content/scripts/validate_gzh_html.py
-  format-content/scripts/wrap_preview.py
   format-content/assets/preview-template.html
   format-content/LICENSE
   LICENSE
@@ -27,6 +25,11 @@ readable .md file, always uses the red-and-white theme, emits a validated
 clean section fragment plus a copy-button preview, and never publishes to
 WeChat. Non-Markdown normalization, theme selection, theme generation, and
 all other themes were removed from this distribution.
+
+The bundled validate_gzh_html.py and wrap_preview.py scripts were locally
+hardened. The validator now requires one balanced top-level section fragment
+while accepting standard HTML void elements, and the preview wrapper now
+limits marker replacement and HTML-escapes the source title.
 
 The installable Skill is packaged under format-content/ so installers retain
 its supporting references, scripts, assets, and metadata. Repository-level

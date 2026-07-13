@@ -15,6 +15,7 @@ validate_gzh_html.py（本预览页含 script/style，不参与校验）。
 
 import os
 import sys
+from html import escape
 
 
 def main():
@@ -31,8 +32,9 @@ def main():
                             "..", "assets", "preview-template.html")
     tpl = open(tpl_path, encoding="utf-8").read()
 
-    title = os.path.splitext(os.path.basename(src))[0]
-    out_html = tpl.replace("{{TITLE}}", title).replace("<!--GZH_CONTENT-->", content)
+    title = escape(os.path.splitext(os.path.basename(src))[0])
+    out_html = tpl.replace("<!--GZH_CONTENT-->", content, 1)
+    out_html = out_html.replace("{{TITLE}}", title, 1)
 
     out = sys.argv[2] if len(sys.argv) > 2 else os.path.splitext(src)[0] + "_预览.html"
     open(out, "w", encoding="utf-8").write(out_html)

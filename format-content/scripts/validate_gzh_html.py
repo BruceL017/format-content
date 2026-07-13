@@ -44,6 +44,72 @@ HALF_PUNCT = re.compile(r"[一-鿿㐀-䶿][,;!?]")
 ASCII_QUOTE = re.compile(r"[\"']")
 # 代码区特征：等宽字体或 white-space:pre —— 其内半角符号是正常的
 CODE_STYLE = re.compile(r"monospace|white-space\s*:\s*pre|courier|consolas|sf mono", re.I)
+VOID_TAGS = {
+    "area", "base", "br", "col", "embed", "hr", "img", "input", "link",
+    "meta", "param", "source", "track", "wbr",
+}
+DOCUMENT_TAGS = {"html", "head", "body"}
+
+
+class StructureChecker(HTMLParser):
+    """检查正文是单个、标签平衡的顶层 section 片段。"""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.stack = []
+        self.top_level = []
+        self.errors = []
+
+    def handle_starttag(self, tag, attrs):
+        if not self.stack:
+            self.top_level.append(tag)
+        if tag in DOCUMENT_TAGS:
+            self.errors.append(f"正文片段不能包含 <{tag}> 文档包装标签")
+        if tag not in VOID_TAGS:
+            self.stack.append(tag)
+
+    def handle_startendtag(self, tag, attrs):
+        if not self.stack:
+            self.top_level.append(tag)
+        if tag in DOCUMENT_TAGS:
+            self.errors.append(f"正文片段不能包含 <{tag}> 文档包装标签")
+
+    def handle_endtag(self, tag):
+        if tag in VOID_TAGS:
+            self.errors.append(f"void 标签 <{tag}> 不能有结束标签")
+        elif not self.stack:
+            self.errors.append(f"多余的结束标签 </{tag}>")
+        elif self.stack[-1] != tag:
+            self.errors.append(
+                f"标签嵌套不平衡：<{self.stack[-1]}> 内遇到 </{tag}>"
+            )
+        else:
+            self.stack.pop()
+
+    def handle_data(self, data):
+        if not self.stack and data.strip():
+            self.errors.append("顶层 <section> 外只能包含空白字符")
+
+    def handle_comment(self, data):
+        if not self.stack:
+            self.errors.append("顶层 <section> 外不能包含注释")
+
+    def handle_decl(self, decl):
+        self.errors.append(f"正文片段不能包含 <!{decl}> 声明")
+
+    def handle_pi(self, data):
+        self.errors.append("正文片段不能包含处理指令")
+
+    def unknown_decl(self, data):
+        self.errors.append("正文片段不能包含未知声明")
+
+    def finish(self):
+        if self.stack:
+            tags = "、".join(f"<{tag}>" for tag in self.stack)
+            self.errors.append(f"存在未闭合标签：{tags}")
+        if self.top_level != ["section"]:
+            self.errors.append("正文必须且只能包含一个顶层 <section>")
+        return self.errors
 
 
 class LeafChecker(HTMLParser):
@@ -104,6 +170,15 @@ def validate(html, name="<input>"):
         if hits:
             (errors if level == "ERROR" else warnings).append(
                 f"{msg}（命中 {hits} 处）")
+
+    structure = StructureChecker()
+    try:
+        structure.feed(html)
+        structure.close()
+    except Exception as e:
+        errors.append(f"HTML 结构解析失败: {e}")
+    else:
+        errors.extend(structure.finish())
 
     checker = LeafChecker()
     try:
