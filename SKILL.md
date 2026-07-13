@@ -12,14 +12,14 @@ Convert one Markdown article into WeChat-compatible inline-styled HTML with the 
 - Trigger for requests such as “公众号排版”, “微信排版”, “把这篇 Markdown 排成公众号 HTML”, or “format this Markdown for a WeChat Official Account”.
 - Accept either Markdown supplied directly in the request or one readable file whose extension is exactly `.md`.
 - Do not accept `.doc`, `.docx`, `.pdf`, `.txt`, HTML/rich text, or unstructured prose. Do not normalize those formats into Markdown; ask the user to provide Markdown instead.
-- Use only `references/theme-red-white.md`. Do not select, recommend, create, or mix themes.
+- Use only `<SKILL_ROOT>/references/theme-red-white.md`. Do not select, recommend, create, or mix themes.
 - Do not rewrite or omit substantive content. Do not create a normal website, publish an article, create a WeChat draft, or call any WeChat API.
 
 ## Guarded procedure
 
 ### 1. Establish paths and validate the input
 
-Treat the directory containing this file as `SKILL_ROOT` and the user's current working directory as `WORKDIR`.
+Treat the installed directory containing this file as `SKILL_ROOT` and the Agent's current working directory as `WORKDIR`. Keep them separate: resolve bundled resources under `SKILL_ROOT`, and always write both outputs under `WORKDIR`, regardless of the source file's directory.
 
 Require exactly one Markdown source:
 
@@ -38,14 +38,14 @@ PREVIEW_PATH = WORKDIR/{stem}_排版_红白色系(red-white)_预览.html
 
 Read these two files before generating HTML:
 
-1. `references/theme-red-white.md` — authoritative design variables, theme components, full article skeleton, article-type recipes, and Markdown mapping.
-2. `references/common-components.md` — authoritative code, media/GIF, pending-media, and small-label components.
+1. `<SKILL_ROOT>/references/theme-red-white.md` — authoritative design variables, theme components, full article skeleton, article-type recipes, and Markdown mapping.
+2. `<SKILL_ROOT>/references/common-components.md` — authoritative code, media/GIF, pending-media, and small-label components.
 
 Also confirm these files exist before assembly:
 
-- `scripts/validate_gzh_html.py`
-- `scripts/wrap_preview.py`
-- `assets/preview-template.html`
+- `<SKILL_ROOT>/scripts/validate_gzh_html.py`
+- `<SKILL_ROOT>/scripts/wrap_preview.py`
+- `<SKILL_ROOT>/assets/preview-template.html`
 
 Stop and report the missing path if any required asset is unavailable. Copy component HTML from the references and fill its slots; do not recreate components from memory. Use a theme component whenever it has the required semantic role, and use a common component only when the theme library lacks that role.
 
@@ -80,7 +80,7 @@ Classify the dominant article type, allowing a secondary type only when genuinel
 
 ### 4. Select the fixed-theme recipe
 
-Use the matching row in `theme-red-white.md` under “文章类型 → 组件组合配方”. Treat its core components as the article's visual rhythm. Add components required by the Markdown mapping, but use no more than three kinds of optional embellishment components across the article.
+Use the matching row in `<SKILL_ROOT>/references/theme-red-white.md` under “文章类型 → 组件组合配方”. Treat its core components as the article's visual rhythm. Add components required by the Markdown mapping, but use no more than three kinds of optional embellishment components across the article.
 
 Apply the red-white visual hierarchy:
 
@@ -92,7 +92,7 @@ Do not use a four-sided dashed border for emphasis. The centered pending-media c
 
 ### 5. Assemble the clean section fragment
 
-Follow the full skeleton in `theme-red-white.md` and its mapping table. The clean file must contain one outer red-white `<section>…</section>` fragment and no `<!DOCTYPE>`, `<html>`, `<head>`, `<body>`, preview toolbar, button, or script.
+Follow the full skeleton in `<SKILL_ROOT>/references/theme-red-white.md` and its mapping table. The clean file must contain one outer red-white `<section>…</section>` fragment and no `<!DOCTYPE>`, `<html>`, `<head>`, `<body>`, preview toolbar, button, or script.
 
 Preserve these upstream behaviors:
 
@@ -149,9 +149,11 @@ Report both absolute output paths, the zero-error/zero-warning result, and this 
 | Preview wrapping or unchanged-embedding verification fails | Keep the validated clean file, report the failure, and do not claim both deliverables |
 
 <example>
+Current working directory: `/workspace`
+
 User: “请把 `/work/article.md` 排成微信公众号 HTML。”
 
-Result: read the Markdown, use only the red-white libraries, write `/work/article_排版_红白色系(red-white).html`, validate it to zero errors and zero warnings, then write `/work/article_排版_红白色系(red-white)_预览.html` and report both paths.
+Result: read the Markdown from `/work/article.md`, use only the red-white libraries under `SKILL_ROOT`, write `/workspace/article_排版_红白色系(red-white).html`, validate it to zero errors and zero warnings, then write `/workspace/article_排版_红白色系(red-white)_预览.html` and report both paths. Do not write either output beside the source file.
 </example>
 
 <bad-example>
